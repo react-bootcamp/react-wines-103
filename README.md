@@ -9,7 +9,7 @@ npm install
 npm start
 ```
 
-or if you use `yarn`
+or if you use `yarn` 
 
 ```sh
 yarn install
