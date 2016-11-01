@@ -14,7 +14,7 @@ import './index.css';
 const RoutedApp = React.createClass({
   render() {
     const root = window.location.hostname === 'react-bootcamp.github.io'
-      ? '/react-wines-102/'
+      ? '/react-wines-103/'
       : '/';
     return (
       <Router history={browserHistory}>

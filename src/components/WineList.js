@@ -52,7 +52,7 @@ export const WineListPage = React.createClass({
   },
   onSelectWine(id) {
     const root = window.location.hostname === 'react-bootcamp.github.io'
-      ? '/react-wines-102/'
+      ? '/react-wines-103/'
       : '/';
     const region = this.props.params.regionId;
     this.context.router.push({

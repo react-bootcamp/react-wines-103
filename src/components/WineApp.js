@@ -9,7 +9,7 @@ export const WineApp = React.createClass({
     this.context.router.goBack();
   },
   render() {
-    const displayButton = window.location.pathname === '/' || window.location.pathname === '/react-wines-102/'
+    const displayButton = window.location.pathname === '/' || window.location.pathname === '/react-wines-103/'
       ? false
       : true;
     return (
