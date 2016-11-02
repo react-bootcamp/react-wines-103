@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Loader } from '.';
-import * as WinesService from '../services/Wines';
+import { connect } from 'react-redux';
 import { LikeButton, CommentButton, CommentList, CommentModal } from '.';
+import * as Actions from '../actions';
+import { host } from '../services/Wines';
 
-export const Wine = React.createClass({
+const Wine = React.createClass({
   render() {
     if (this.props.wine === null) {
       return null;
@@ -36,27 +38,18 @@ export const Wine = React.createClass({
   }
 });
 
-export const WinePage = React.createClass({
+const WinePage = React.createClass({
   contextTypes: {
     router: PropTypes.object
   },
   getInitialState() {
     return {
-      loading: false,
-      selectedWine: null,
       commentModalOpen: false,
     };
   },
   componentDidMount() {
     const id = this.props.params.wineId;
-    this.setState({ loading: true }, () => {
-      WinesService.fetchWine(id).then(wine => {
-        this.setState({
-          loading: false,
-          selectedWine: wine
-        });
-      });
-    });
+    this.props.dispatch(Actions.fetchCurrentWine(id));
   },
   closeCommentModal() {
     this.setState({ commentModalOpen: false });
@@ -65,20 +58,31 @@ export const WinePage = React.createClass({
     this.setState({ commentModalOpen: true });
   },
   render() {
-    if (this.state.loading) {
+    if (this.props.loading) {
       return <div className="center-align"><Loader /></div>
     }
     return (
       <div>
         <Wine
-          host={WinesService.host}
-          wine={this.state.selectedWine}
+          host={host}
+          wine={this.props.wine}
           openCommentModal={this.openCommentModal} />
         <CommentModal
-          wine={this.state.selectedWine}
+          wine={this.props.wine}
           isOpen={this.state.commentModalOpen} 
           closeCommentModal={this.closeCommentModal} />
       </div>
     );
   }
 });
+
+function mapFromStoreToProps(store) {
+  return {
+    wine: store.currentWine ? store.currentWine.wine : null,
+    comments: store.currentWine ? store.currentWine.comments : [],
+    liked: store.currentWine ? store.currentWine.liked : false,
+    loading: store.loading === 'HTTP_LOADING',
+  };
+}
+
+exports.WinePage = connect(mapFromStoreToProps)(WinePage);

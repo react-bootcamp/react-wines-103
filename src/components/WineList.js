@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react';
 import { Loader } from '.';
-import * as WinesService from '../services/Wines';
+import { connect } from 'react-redux';
 
-export const WineList = React.createClass({
+import * as Actions from '../actions';
+
+const WineList = React.createClass({
   onSelectWine(e, wineId) {
     e.preventDefault();
     this.props.onSelectWine(wineId);
@@ -29,26 +31,13 @@ export const WineList = React.createClass({
   }
 });
 
-export const WineListPage = React.createClass({
+const WineListPage = React.createClass({
   contextTypes: {
     router: PropTypes.object
   },
-  getInitialState() {
-    return {
-      loading: false,
-      wines: []
-    };
-  },
   componentDidMount() {
     const region = this.props.params.regionId;
-    this.setState({ loading: true }, () => {
-      WinesService.fetchWinesFrom(region).then(wines => {
-        this.setState({
-          loading: false,
-          wines
-        });
-      });
-    });
+    this.props.dispatch(Actions.fetchWinesFrom(region));
   },
   onSelectWine(id) {
     const root = window.location.hostname === 'react-bootcamp.github.io'
@@ -60,14 +49,23 @@ export const WineListPage = React.createClass({
     });
   },
   render() {
-    if (this.state.loading) {
+    if (this.props.loading) {
       return <div className="center-align"><Loader /></div>
     }
     return (
       <WineList
         onSelectWine={this.onSelectWine}
-        wines={this.state.wines}
+        wines={this.props.wines}
         wine={{}} />
     );
   }
 });
+
+function mapFromStoreToProps(store) {
+  return {
+    wines: store.wines,
+    loading: store.loading === 'HTTP_LOADING',
+  };
+}
+
+exports.WineListPage = connect(mapFromStoreToProps)(WineListPage);

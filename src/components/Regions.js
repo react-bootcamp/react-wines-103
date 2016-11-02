@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
-import * as WinesService from '../services/Wines';
 import { Loader } from '.';
+import { connect } from 'react-redux';
+import * as Actions from '../actions';
 
-export const Regions = React.createClass({
+const Regions = React.createClass({
   onSelectRegion(e, region) {
     e.preventDefault();
     this.props.onSelectRegion(region);
@@ -26,25 +27,12 @@ export const Regions = React.createClass({
   }
 });
 
-export const RegionsPage = React.createClass({
+const RegionsPage = React.createClass({
   contextTypes: {
     router: PropTypes.object
   },
-  getInitialState() {
-    return {
-      loading: false,
-      regions: [],
-    };
-  },
   componentDidMount() {
-    this.setState({ loading: true }, () => {
-      WinesService.fetchRegions().then(regions => {
-        this.setState({
-          loading: false,
-          regions,
-        });
-      });
-    });
+    this.props.dispatch(Actions.fetchRegions());
   },
   onSelectRegion(region) {
     const root = window.location.hostname === 'react-bootcamp.github.io'
@@ -55,14 +43,23 @@ export const RegionsPage = React.createClass({
     });
   },
   render() {
-    if (this.state.loading) {
+    if (this.props.loading) {
       return <div className="center-align"><Loader /></div>
     }
     return (
       <Regions
         onSelectRegion={this.onSelectRegion}
-        regions={this.state.regions}
+        regions={this.props.regions}
         region={{}} />
     );
   }
 });
+
+function mapFromStoreToProps(store) {
+  return {
+    regions: store.regions,
+    loading: store.loading === 'HTTP_LOADING',
+  };
+}
+
+exports.RegionsPage = connect(mapFromStoreToProps)(RegionsPage);

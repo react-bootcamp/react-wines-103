@@ -1,7 +1,8 @@
 import React from 'react';
-import * as WinesService from '../services/Wines';
+import { connect } from 'react-redux';
+import * as Actions from '../actions';
 
-export const CommentModal = React.createClass({
+const CommentModal = React.createClass({
   getInitialState() {
     return {
       comment: ''
@@ -29,7 +30,7 @@ export const CommentModal = React.createClass({
     e.preventDefault();
     const comment = this.state.comment;
     this.setState({ comment: '' });
-    WinesService.commentWine(this.props.wine.id, comment).then(() => {
+    this.props.dispatch(Actions.commentWine(this.props.wine.id, comment)).then(() => {
       this.props.closeCommentModal();
     });
   },
@@ -58,3 +59,5 @@ export const CommentModal = React.createClass({
     );
   }
 });
+
+exports.CommentModal = connect()(CommentModal);

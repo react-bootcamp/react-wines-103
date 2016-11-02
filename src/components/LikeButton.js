@@ -1,48 +1,44 @@
 import React from 'react';
 import { Loader } from '.';
-import * as WinesService from '../services/Wines';
+import { connect } from 'react-redux';
+import * as Actions from '../actions';
 
-export const LikeButton = React.createClass({
-  getInitialState() {
-    return {
-      loading: false,
-      liked: null
-    };
-  },
+const LikeButton = React.createClass({
   componentDidMount() {
     this.updateLike();
   },
   componentWillReceiveProps(nextProps) {
-    this.setState({ liked: null }, () => {
+    if (this.props.wine !== nextProps.wine) {
       this.updateLike();
-    });
+    }
   },
   updateLike() {
-    this.setState({ loading: true }, () => {
-      return WinesService.fetchLiked(this.props.wine.id).then(liked => {
-        this.setState({ liked: liked.like, loading: false });
-      });
-    });
+    this.props.dispatch(Actions.fetchCurrentWineLiked(this.props.wine.id))
   },
   toggle(e) {
     e.preventDefault();
-    if (this.state.liked) {
-      this.setState({ liked: !this.state.liked }, () => {
-        WinesService.unlikeWine(this.props.wine.id).then(() => this.updateLike());
-      });
+    if (this.props.liked) {
+      this.props.dispatch(Actions.unlikeWine(this.props.wine.id));
     } else {
-      this.setState({ liked: !this.state.liked }, () => {
-        WinesService.likeWine(this.props.wine.id).then(() => this.updateLike());
-      });
+      this.props.dispatch(Actions.likeWine(this.props.wine.id));
     }
   },
   render() {
     return (
       <a className="waves-effect waves-teal btn-flat" onClick={this.toggle}>
-        {this.state.loading && (<Loader />)}
-        {this.state.liked === true && (<span>Unlike <i className="material-icons left">thumb_down</i></span>)}
-        {this.state.liked === false && (<span>Like <i className="material-icons left">thumb_up</i></span>)}
+        {this.props.loading && (<Loader />)}
+        {this.props.liked === true && (<span>Unlike <i className="material-icons left">thumb_down</i></span>)}
+        {this.props.liked === false && (<span>Like <i className="material-icons left">thumb_up</i></span>)}
       </a>
     );
   }
 });
+
+function mapFromStoreToProps(store) {
+  return {
+    liked: store.currentWine ? store.currentWine.liked : false,
+    loading: store.loading === 'HTTP_LOADING',
+  };
+}
+
+exports.LikeButton = connect(mapFromStoreToProps)(LikeButton);
