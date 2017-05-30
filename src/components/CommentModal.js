@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
-const CommentModal = React.createClass({
-  getInitialState() {
-    return {
-      comment: ''
-    };
-  },
+class _CommentModal extends Component {
+
+  state = {
+    comment: ''
+  };
+
   componentDidMount() {
     if (this.props.isOpen) {
       window.$(this.modalNode).openModal();
     }
-  },
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.isOpen !== this.props.isOpen) {
       if (nextProps.isOpen) {
@@ -22,21 +23,25 @@ const CommentModal = React.createClass({
         window.$(this.modalNode).closeModal();
       }
     }
-  },
+  }
+
   componentWillUnmount() {
     window.$(this.modalNode).closeModal();
-  },
-  onSubmit(e) {
+  }
+
+  onSubmit = (e) => {
     e.preventDefault();
     const comment = this.state.comment;
     this.setState({ comment: '' });
     this.props.dispatch(Actions.commentWine(this.props.wine.id, comment)).then(() => {
       this.props.closeCommentModal();
     });
-  },
-  onCommentChange(e) {
+  }
+
+  onCommentChange = (e) => {
     this.setState({ comment: e.target.value });
-  },
+  }
+
   render() {
     return (
       <div ref={ref => this.modalNode = ref} className="modal">
@@ -58,6 +63,6 @@ const CommentModal = React.createClass({
       </div>
     );
   }
-});
+}
 
-exports.CommentModal = connect()(CommentModal);
+export const CommentModal = connect()(_CommentModal);

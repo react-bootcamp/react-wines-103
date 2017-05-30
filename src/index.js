@@ -1,12 +1,7 @@
 import 'es6-shim'; // yeah, polyfill all the things !!!
 import 'whatwg-fetch'; // yeah, polyfill all the things !!!
 import Symbol from 'es-symbol';
-if (!window.Symbol) {
-  window.Symbol = Symbol; // yeah, polyfill all the things !!!
-}
-import './index.css';
-
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
@@ -15,10 +10,15 @@ import { createStore, applyMiddleware } from 'redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { WineApp, RegionsPage, WineListPage, WinePage, NotFound } from './components';
+import './index.css';
+
+if (!window.Symbol) {
+  window.Symbol = Symbol; // yeah, polyfill all the things !!!
+}
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
-const RoutedApp = React.createClass({
+class RoutedApp extends Component {
   render() {
     const root = window.location.hostname === 'react-bootcamp.github.io'
       ? '/react-wines-103/'
@@ -37,6 +37,6 @@ const RoutedApp = React.createClass({
       </Provider>
     );
   }
-});
+}
 
 ReactDOM.render(<RoutedApp />, document.getElementById('root'));

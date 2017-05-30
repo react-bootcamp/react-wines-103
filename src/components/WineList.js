@@ -1,14 +1,16 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Loader } from '.';
 import { connect } from 'react-redux';
 
 import * as Actions from '../actions';
 
-const WineList = React.createClass({
-  onSelectWine(e, wineId) {
+class WineList extends Component {
+
+  onSelectWine = (e, wineId) => {
     e.preventDefault();
     this.props.onSelectWine(wineId);
-  },
+  };
+
   render() {
     if (this.props.region === null) {
       return null;
@@ -29,17 +31,20 @@ const WineList = React.createClass({
       </div>
     );
   }
-});
+}
 
-const WineListPage = React.createClass({
-  contextTypes: {
+class _WineListPage extends Component {
+
+  static contextTypes = {
     router: PropTypes.object
-  },
+  };
+
   componentDidMount() {
     const region = this.props.params.regionId;
     this.props.dispatch(Actions.fetchWinesFrom(region));
-  },
-  onSelectWine(id) {
+  }
+
+  onSelectWine = (id) => {
     const root = window.location.hostname === 'react-bootcamp.github.io'
       ? '/react-wines-103/'
       : '/';
@@ -47,7 +52,8 @@ const WineListPage = React.createClass({
     this.context.router.push({
       pathname: `${root}regions/${region}/wines/${id}`
     });
-  },
+  }
+
   render() {
     if (this.props.loading) {
       return <div className="center-align"><Loader /></div>
@@ -59,7 +65,7 @@ const WineListPage = React.createClass({
         wine={{}} />
     );
   }
-});
+}
 
 function mapFromStoreToProps(store) {
   return {
@@ -68,4 +74,4 @@ function mapFromStoreToProps(store) {
   };
 }
 
-exports.WineListPage = connect(mapFromStoreToProps)(WineListPage);
+export const WineListPage = connect(mapFromStoreToProps)(_WineListPage);

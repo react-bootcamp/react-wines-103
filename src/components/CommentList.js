@@ -1,20 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Comment, Loader } from '.';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
-const CommentList = React.createClass({
+class _CommentList extends Component {
+
   componentDidMount() {
     this.updateList();
-  },
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.wine !== nextProps.wine) {
       this.updateList();
     }
-  },
-  updateList() {
+  }
+
+  updateList = () => {
     this.props.dispatch(Actions.fetchCurrentWineComments(this.props.wine.id));
-  },
+  }
+
   render() {
     return (
       <div>
@@ -24,7 +28,7 @@ const CommentList = React.createClass({
       </div>
     );
   }
-});
+}
 
 function mapFromStoreToProps(store) {
   return {
@@ -33,4 +37,4 @@ function mapFromStoreToProps(store) {
   };
 }
 
-exports.CommentList = connect(mapFromStoreToProps)(CommentList);
+export const CommentList = connect(mapFromStoreToProps)(_CommentList);

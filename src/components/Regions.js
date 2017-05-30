@@ -1,13 +1,15 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Loader } from '.';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
-const Regions = React.createClass({
-  onSelectRegion(e, region) {
+class Regions extends Component {
+
+  onSelectRegion = (e, region) => {
     e.preventDefault();
     this.props.onSelectRegion(region);
-  },
+  }
+
   render() {
     return (
       <div className="col s12 m6 l4 offset-m3 offset-l4">
@@ -25,23 +27,27 @@ const Regions = React.createClass({
       </div>
     );
   }
-});
+}
 
-const RegionsPage = React.createClass({
-  contextTypes: {
+class _RegionsPage extends Component {
+
+  static contextTypes = {
     router: PropTypes.object
-  },
+  };
+
   componentDidMount() {
     this.props.dispatch(Actions.fetchRegions());
-  },
-  onSelectRegion(region) {
+  }
+
+  onSelectRegion = (region) => {
     const root = window.location.hostname === 'react-bootcamp.github.io'
       ? '/react-wines-103/'
       : '/';
     this.context.router.push({
       pathname: `${root}regions/${region}`
     });
-  },
+  };
+
   render() {
     if (this.props.loading) {
       return <div className="center-align"><Loader /></div>
@@ -53,7 +59,7 @@ const RegionsPage = React.createClass({
         region={{}} />
     );
   }
-});
+}
 
 function mapFromStoreToProps(store) {
   return {
@@ -62,4 +68,4 @@ function mapFromStoreToProps(store) {
   };
 }
 
-exports.RegionsPage = connect(mapFromStoreToProps)(RegionsPage);
+export const RegionsPage = connect(mapFromStoreToProps)(_RegionsPage);

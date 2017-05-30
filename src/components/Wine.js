@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Loader } from '.';
 import { connect } from 'react-redux';
 import { LikeButton, CommentButton, CommentList, CommentModal } from '.';
 import * as Actions from '../actions';
 import { host } from '../services/Wines';
 
-const Wine = React.createClass({
+class Wine extends Component {
   render() {
     if (this.props.wine === null) {
       return null;
@@ -36,27 +36,31 @@ const Wine = React.createClass({
       </div>
     );
   }
-});
+}
 
-const WinePage = React.createClass({
-  contextTypes: {
+class _WinePage extends Component {
+
+  static contextTypes = {
     router: PropTypes.object
-  },
-  getInitialState() {
-    return {
-      commentModalOpen: false,
-    };
-  },
+  };
+
+  state = {
+    commentModalOpen: false,
+  };
+
   componentDidMount() {
     const id = this.props.params.wineId;
     this.props.dispatch(Actions.fetchCurrentWine(id));
-  },
-  closeCommentModal() {
+  }
+
+  closeCommentModal = () => {
     this.setState({ commentModalOpen: false });
-  },
-  openCommentModal() {
+  };
+
+  openCommentModal = () => {
     this.setState({ commentModalOpen: true });
-  },
+  };
+
   render() {
     if (this.props.loading) {
       return <div className="center-align"><Loader /></div>
@@ -74,7 +78,7 @@ const WinePage = React.createClass({
       </div>
     );
   }
-});
+}
 
 function mapFromStoreToProps(store) {
   return {
@@ -85,4 +89,4 @@ function mapFromStoreToProps(store) {
   };
 }
 
-exports.WinePage = connect(mapFromStoreToProps)(WinePage);
+export const WinePage = connect(mapFromStoreToProps)(_WinePage);
