@@ -1,12 +1,11 @@
-
 export const wines = (state = [], action) => {
   switch (action.type) {
     case 'SET_WINES':
-      return [ ...action.wines ];
+      return [...action.wines];
     default:
       return state;
   }
-}
+};
 
 export const currentWine = (state = { wine: null, comments: [], liked: false }, action) => {
   switch (action.type) {
@@ -19,4 +18,4 @@ export const currentWine = (state = { wine: null, comments: [], liked: false }, 
     default:
       return state;
   }
-}
+};

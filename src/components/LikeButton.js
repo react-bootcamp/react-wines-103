@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
 class _LikeButton extends Component {
-
   componentDidMount() {
     this.updateLike();
   }
@@ -16,24 +15,32 @@ class _LikeButton extends Component {
   }
 
   updateLike = () => {
-    this.props.dispatch(Actions.fetchCurrentWineLiked(this.props.wine.id))
-  }
+    this.props.dispatch(Actions.fetchCurrentWineLiked(this.props.wine.id));
+  };
 
-  toggle = (e) => {
+  toggle = e => {
     e.preventDefault();
     if (this.props.liked) {
       this.props.dispatch(Actions.unlikeWine(this.props.wine.id));
     } else {
       this.props.dispatch(Actions.likeWine(this.props.wine.id));
     }
-  }
+  };
 
   render() {
     return (
       <a className="waves-effect waves-teal btn-flat" onClick={this.toggle}>
-        {this.props.loading && (<Loader />)}
-        {this.props.liked === true && (<span>Unlike <i className="material-icons left">thumb_down</i></span>)}
-        {this.props.liked === false && (<span>Like <i className="material-icons left">thumb_up</i></span>)}
+        {this.props.loading && <Loader />}
+        {this.props.liked === true && (
+          <span>
+            Unlike <i className="material-icons left">thumb_down</i>
+          </span>
+        )}
+        {this.props.liked === false && (
+          <span>
+            Like <i className="material-icons left">thumb_up</i>
+          </span>
+        )}
       </a>
     );
   }

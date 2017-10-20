@@ -4,160 +4,184 @@ export const setHttpLoading = () => {
   return {
     type: 'HTTP_LOADING',
   };
-}
+};
 
 export const setHttpLoaded = () => {
   return {
     type: 'HTTP_LOADED',
   };
-}
+};
 
-export const setHttpError = (error) => {
+export const setHttpError = error => {
   return {
     type: 'HTTP_ERROR',
-    error
+    error,
   };
-}
+};
 
-export const setRegions = (regions) => {
+export const setRegions = regions => {
   return {
     type: 'SET_REGIONS',
-    regions
+    regions,
   };
-}
+};
 
-export const fetchRegions = () => {
+export const fetchRegions = () => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setRegions([]));
-    return WinesService.fetchRegions().then(data => {
-      dispatch(setHttpLoaded());
-      dispatch(setRegions(data));
-      return data;
-    }, err => {
-      dispatch(setHttpError(`error while fetching regions : ${err.message}`));
-    });
+    return WinesService.fetchRegions().then(
+      data => {
+        dispatch(setHttpLoaded());
+        dispatch(setRegions(data));
+        return data;
+      },
+      err => {
+        dispatch(setHttpError(`error while fetching regions : ${err.message}`));
+      }
+    );
   };
-}
+};
 
-export const setWines = (wines) => {
+export const setWines = wines => {
   return {
     type: 'SET_WINES',
-    wines
+    wines,
   };
-}
+};
 
-export const fetchWinesFrom = (region) => {
+export const fetchWinesFrom = region => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setWines([]));
-    return WinesService.fetchWinesFrom(region).then(data => {
-      dispatch(setHttpLoaded());
-      dispatch(setWines(data));
-      return data;
-    }, err => {
-      dispatch(setHttpError(`error while fetching wines from ${region} : ${err.message}`));
-    });
+    return WinesService.fetchWinesFrom(region).then(
+      data => {
+        dispatch(setHttpLoaded());
+        dispatch(setWines(data));
+        return data;
+      },
+      err => {
+        dispatch(setHttpError(`error while fetching wines from ${region} : ${err.message}`));
+      }
+    );
   };
-}
+};
 
-export const setCurrentWine = (wine) => {
+export const setCurrentWine = wine => {
   return {
     type: 'SET_CURRENT_WINE',
-    wine
+    wine,
   };
-}
+};
 
-export const fetchCurrentWine = (id) => {
+export const fetchCurrentWine = id => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setCurrentWine(null));
-    return WinesService.fetchWine(id).then(data => {
-      dispatch(setHttpLoaded());
-      dispatch(setCurrentWine(data));
-      return data;
-    }, err => {
-      dispatch(setHttpError(`error while fetching wine with id ${id} : ${err.message}`));
-    });
+    return WinesService.fetchWine(id).then(
+      data => {
+        dispatch(setHttpLoaded());
+        dispatch(setCurrentWine(data));
+        return data;
+      },
+      err => {
+        dispatch(setHttpError(`error while fetching wine with id ${id} : ${err.message}`));
+      }
+    );
   };
-}
+};
 
-export const setCurrentWineComments = (comments) => {
+export const setCurrentWineComments = comments => {
   return {
     type: 'SET_CURRENT_COMMENTS',
-    comments
+    comments,
   };
-}
+};
 
-export const fetchCurrentWineComments = (id) => {
+export const fetchCurrentWineComments = id => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setCurrentWineComments([]));
-    return WinesService.fetchComments(id).then(data => {
-      dispatch(setHttpLoaded());
-      dispatch(setCurrentWineComments(data));
-      return data;
-    }, err => {
-      dispatch(setHttpError(`error while fetching wine comments with id ${id} : ${err.message}`));
-    });
+    return WinesService.fetchComments(id).then(
+      data => {
+        dispatch(setHttpLoaded());
+        dispatch(setCurrentWineComments(data));
+        return data;
+      },
+      err => {
+        dispatch(setHttpError(`error while fetching wine comments with id ${id} : ${err.message}`));
+      }
+    );
   };
-}
+};
 
-export const setCurrentWineLiked = (liked) => {
+export const setCurrentWineLiked = liked => {
   return {
     type: 'SET_CURRENT_LIKED',
-    liked
+    liked,
   };
-}
+};
 
-export const fetchCurrentWineLiked = (id) => {
+export const fetchCurrentWineLiked = id => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setCurrentWineLiked(false));
-    return WinesService.fetchLiked(id).then(data => {
-      dispatch(setHttpLoaded());
-      dispatch(setCurrentWineLiked(data.like));
-      return data;
-    }, err => {
-      dispatch(setHttpError(`error while fetching wine liked with id ${id} : ${err.message}`));
-    });
+    return WinesService.fetchLiked(id).then(
+      data => {
+        dispatch(setHttpLoaded());
+        dispatch(setCurrentWineLiked(data.like));
+        return data;
+      },
+      err => {
+        dispatch(setHttpError(`error while fetching wine liked with id ${id} : ${err.message}`));
+      }
+    );
   };
-}
+};
 
-export const likeWine = (id) => {
+export const likeWine = id => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setCurrentWineLiked(true));
-    return WinesService.likeWine(id).then(data => {
-      dispatch(setHttpLoaded());
-      return dispatch(fetchCurrentWineLiked(id));
-    }, err => {
-      dispatch(setHttpError(`error while liking wine with id ${id} : ${err.message}`));
-    });
+    return WinesService.likeWine(id).then(
+      data => {
+        dispatch(setHttpLoaded());
+        return dispatch(fetchCurrentWineLiked(id));
+      },
+      err => {
+        dispatch(setHttpError(`error while liking wine with id ${id} : ${err.message}`));
+      }
+    );
   };
-}
+};
 
-export const unlikeWine = (id) => {
+export const unlikeWine = id => {
   return dispatch => {
     dispatch(setHttpLoading());
     dispatch(setCurrentWineLiked(false));
-    return WinesService.unlikeWine(id).then(data => {
-      dispatch(setHttpLoaded());
-      return dispatch(fetchCurrentWineLiked(id));
-    }, err => {
-      dispatch(setHttpError(`error while liking wine with id ${id} : ${err.message}`));
-    });
+    return WinesService.unlikeWine(id).then(
+      data => {
+        dispatch(setHttpLoaded());
+        return dispatch(fetchCurrentWineLiked(id));
+      },
+      err => {
+        dispatch(setHttpError(`error while liking wine with id ${id} : ${err.message}`));
+      }
+    );
   };
-}
+};
 
 export const commentWine = (id, content) => {
   return dispatch => {
     dispatch(setHttpLoading());
-    return WinesService.commentWine(id, content).then(data => {
-      dispatch(setHttpLoaded());
-      return dispatch(fetchCurrentWineComments(id));
-    }, err => {
-      dispatch(setHttpError(`error while commenting wine with id ${id} : ${err.message}`));
-    });
+    return WinesService.commentWine(id, content).then(
+      data => {
+        dispatch(setHttpLoaded());
+        return dispatch(fetchCurrentWineComments(id));
+      },
+      err => {
+        dispatch(setHttpError(`error while commenting wine with id ${id} : ${err.message}`));
+      }
+    );
   };
-}
+};

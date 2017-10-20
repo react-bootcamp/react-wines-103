@@ -10,5 +10,5 @@ export const reducer = combineReducers({
   wines,
   currentWine,
   loading,
-  routing: routerReducer
+  routing: routerReducer,
 });

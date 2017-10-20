@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { reducer } from './reducers';
 import { createStore, applyMiddleware } from 'redux';
 import { syncHistoryWithStore } from 'react-router-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { WineApp, RegionsPage, WineListPage, WinePage, NotFound } from './components';
 import './index.css';
 
@@ -20,9 +20,8 @@ const store = createStore(reducer, applyMiddleware(thunk));
 
 class RoutedApp extends Component {
   render() {
-    const root = window.location.hostname === 'react-bootcamp.github.io'
-      ? '/react-wines-103/'
-      : '/';
+    const root =
+      window.location.hostname === 'react-bootcamp.github.io' ? '/react-wines-103/' : '/';
     const history = syncHistoryWithStore(browserHistory, store);
     return (
       <Provider store={store}>

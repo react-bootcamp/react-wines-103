@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
 class _CommentModal extends Component {
-
   state = {
-    comment: ''
+    comment: '',
   };
 
   componentDidMount() {
@@ -29,36 +28,52 @@ class _CommentModal extends Component {
     window.$(this.modalNode).closeModal();
   }
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault();
     const comment = this.state.comment;
     this.setState({ comment: '' });
     this.props.dispatch(Actions.commentWine(this.props.wine.id, comment)).then(() => {
       this.props.closeCommentModal();
     });
-  }
+  };
 
-  onCommentChange = (e) => {
+  onCommentChange = e => {
     this.setState({ comment: e.target.value });
-  }
+  };
 
   render() {
     return (
-      <div ref={ref => this.modalNode = ref} className="modal">
+      <div ref={ref => (this.modalNode = ref)} className="modal">
         <div className="modal-content">
           <h4>Tell us something about this wine</h4>
           <form className="col s12">
             <div className="row">
               <div className="input-field col s12">
-                <input id="inputComment" type="text" className="validate" value={this.state.comment} onChange={this.onCommentChange} />
+                <input
+                  id="inputComment"
+                  type="text"
+                  className="validate"
+                  value={this.state.comment}
+                  onChange={this.onCommentChange}
+                />
                 <label htmlFor="inputComment">Your comment</label>
               </div>
             </div>
           </form>
         </div>
         <div className="modal-footer">
-          <a href="#!" className="modal-action waves-effect waves-green btn-flat " onClick={this.onSubmit}>Submit</a>
-          <a href="#!" className="modal-action waves-effect waves-green btn-flat " onClick={this.props.closeCommentModal}>Cancel</a>
+          <a
+            href="#!"
+            className="modal-action waves-effect waves-green btn-flat "
+            onClick={this.onSubmit}>
+            Submit
+          </a>
+          <a
+            href="#!"
+            className="modal-action waves-effect waves-green btn-flat "
+            onClick={this.props.closeCommentModal}>
+            Cancel
+          </a>
         </div>
       </div>
     );

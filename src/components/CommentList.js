@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as Actions from '../actions';
 
 class _CommentList extends Component {
-
   componentDidMount() {
     this.updateList();
   }
@@ -17,14 +16,15 @@ class _CommentList extends Component {
 
   updateList = () => {
     this.props.dispatch(Actions.fetchCurrentWineComments(this.props.wine.id));
-  }
+  };
 
   render() {
     return (
       <div>
         {this.props.comments.length > 0 && <h5>Comments</h5>}
         {this.props.loading && <Loader />}
-        {!this.props.loading && this.props.comments.map(comment => <Comment key={comment.date} comment={comment} />)}
+        {!this.props.loading &&
+          this.props.comments.map(comment => <Comment key={comment.date} comment={comment} />)}
       </div>
     );
   }
