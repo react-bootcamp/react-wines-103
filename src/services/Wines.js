@@ -1,4 +1,5 @@
-export const host = 'https://wines-api.herokuapp.com';
+// export const host = 'https://wines-api.herokuapp.com';
+export const host = 'https://app-4fc9cf4d-9c01-43ec-b766-531b417ad183.cleverapps.io';
 
 export function fetchRegions() {
   const url = `${host}/api/regions`;
